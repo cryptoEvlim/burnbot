@@ -1,0 +1,11 @@
+{
+  "name": "burnbot",
+  "version": "1.0.0",
+  "description": "solana burn bot",
+  "main": "burnBot.js",
+  "scripts": {
+    "test": "start"
+  },
+  "author": "",
+  "license": "ISC"
+}
