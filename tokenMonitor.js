@@ -10,6 +10,19 @@ class TokenMonitor {
         this.totalBurned = null;
     }
 
+    totalBurned = () => {
+        return this.totalBurned
+    }
+    currentSupply = () => {
+        return this.currentSupply
+    }
+    originalSupplyAmount = () => {
+        return this.originalSupplyAmount
+    }
+    tokenAddress = () => {
+        return this.tokenPublicKey
+    }
+
     async initializeCurrentSupply() {
         try {
             const tokenSupply = await this.fetchTokenSupply();
@@ -35,10 +48,10 @@ class TokenMonitor {
             const newSupply = await this.fetchTokenSupply();
             const newSupplyAmount = BigInt(newSupply.amount);
             const oldSupplyAmount = BigInt(this.currentSupply.amount);
-            const newSupplyUiAmount = BigInt(newSupply.uiAmount);
-            const oldSupplyUiAmount = BigInt(this.currentSupply.uiAmount);
+            const newSupplyUiAmount = newSupply.uiAmount;
+            const oldSupplyUiAmount = this.currentSupply.uiAmount;
 
-            if (newSupplyAmount < currentSupplyAmount) {
+            if (newSupplyAmount < oldSupplyAmount) {
                 console.log("new supply amount: ", newSupplyAmount.toString());
                 console.log("old supply amount: ", oldSupplyAmount.toString());
 
@@ -85,7 +98,6 @@ class TokenMonitor {
                 async (accountInfo) => {
                     try {
                         const mintAddress = await this.getMintAddress(accountInfo);
-                        console.log('Mint Address:', mintAddress);
                         if (mintAddress === this.tokenPublicKey.toBase58()) {
                             await this.checkTokenAccountChanged();
                             console.log('Checked token account changes');
@@ -94,11 +106,11 @@ class TokenMonitor {
                         console.error('Error in checking token account changes:', error);
                     }
                 },
-                "confirmed",
+                "finalized",
                 [{ memcmp: { offset: 0, bytes: this.tokenPublicKey.toBase58() } }] // Filter for the specific token
             );
 
-            console.log('Subscription ID:', subscriptionId);
+            console.log('Tracking burn events with subscription ID:', subscriptionId);
             return subscriptionId;
         } catch (error) {
             console.error('Error in subscription:', error);
