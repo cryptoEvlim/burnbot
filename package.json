@@ -1,11 +1,17 @@
 {
-  "name": "burnbot",
+  "name": "burn_monitor",
   "version": "1.0.0",
-  "description": "solana burn bot",
+  "description": "solana token burn monitor",
   "main": "burnBot.js",
   "scripts": {
-    "test": "start"
+    "start": "node telegramBot.js",
+    "burn": "node burnTokens.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@solana/spl-token": "^0.4.0",
+    "@solana/web3.js": "^1.90.0",
+    "dotenv": "^16.4.4"
+  }
 }
