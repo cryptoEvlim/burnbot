@@ -10,22 +10,10 @@ class TokenMonitor {
         this.totalBurned = null;
     }
 
-    totalBurned = () => {
-        return this.totalBurned
-    }
-    currentSupply = () => {
-        return this.currentSupply
-    }
-    originalSupplyAmount = () => {
-        return this.originalSupplyAmount
-    }
-    tokenAddress = () => {
-        return this.tokenPublicKey
-    }
-
     async initializeCurrentSupply() {
         try {
             const tokenSupply = await this.fetchTokenSupply();
+            this.totalBurned = await this.fetchTotalBurned();
             this.currentSupply = { amount: tokenSupply.amount, uiAmount: tokenSupply.uiAmount };
         } catch (error) {
             console.error('Error initializing current supply:', error);
@@ -116,6 +104,18 @@ class TokenMonitor {
             console.error('Error in subscription:', error);
             throw error;
         }
+    }
+
+
+    startPolling = async () => {
+
+        setInterval(async () => {
+            try {
+                await this.checkTokenAccountChanged();
+            } catch (error) {
+                console.error(error);
+            }
+        }, 10000);
     }
 }
 

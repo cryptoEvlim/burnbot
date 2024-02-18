@@ -9,8 +9,7 @@ const originalSupplyAmount = 100000000;
 
 const lepeMonitor = new TokenMonitor(httpEndpoint, wsEndpoint, lepeTokenAddress, originalSupplyAmount);
 
-(async () => {
-    await lepeMonitor.initializeCurrentSupply();
-    await lepeMonitor.fetchTotalBurned();
-    await lepeMonitor.subscribeToTokenAccount();
-})();
+
+lepeMonitor.initializeCurrentSupply();
+lepeMonitor.fetchTotalBurned();
+lepeMonitor.startPolling();
